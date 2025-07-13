@@ -12,7 +12,7 @@ class MRWordFreqCount(MRJob):
 
     def mapper_get_words(self, _, line):
         # Updated set of words to exclude
-        exclude_words = set(['the', 'a', 'an', 'and', 'or', 'i', 'to', 'of', 'my', 'that'])
+        #exclude_words = set(['the', 'a', 'an', 'and', 'or', 'i', 'to', 'of', 'my', 'that'])
 
         line = line.strip().lower()
         # Remove punctuations
@@ -20,15 +20,15 @@ class MRWordFreqCount(MRJob):
             line = line.replace(s, '')
         words = line.split()
         for word in words:
-            if word not in exclude_words:
-                yield (word, 1)
+            #if word not in exclude_words:
+            yield (word, 1)
 
     def reducer_count_words(self, word, counts):
         yield None, (sum(counts), word)
 
     def reducer_find_top_words(self, _, word_counts):
-        # Sort the word_counts in descending order and take the top 5
-        top_words = sorted(word_counts, reverse=True)[:5]
+        # Sort the word_counts in descending order and take the top 10
+        top_words = sorted(word_counts, reverse=True)[:9]
         for count, word in top_words:
             yield (word, count)
 
